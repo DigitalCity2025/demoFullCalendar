@@ -1,6 +1,6 @@
-import {Component, effect, EventEmitter, inject, input, output} from '@angular/core';
+import {Component, effect, inject, input, output} from '@angular/core';
 import {EventModel} from '../../models/event.model';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {EventService} from '../../services/event.service';
 import {iif} from 'rxjs';

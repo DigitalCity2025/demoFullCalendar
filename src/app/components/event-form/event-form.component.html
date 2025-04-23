@@ -1,6 +1,8 @@
-<div class="flex justify-content-end mb-3">
-  <p-button icon="pi pi-trash" (onClick)="delete()" severity="danger"></p-button>
-</div>
+@if(event().id) {
+  <div class="flex justify-content-end mb-3">
+    <p-button icon="pi pi-trash" (onClick)="delete()" severity="danger"></p-button>
+  </div>
+}
 <form [formGroup]="form" (ngSubmit)="save()">
   <div class="pb-3">
     <p-float-label variant="on">
@@ -16,13 +18,13 @@
   </div>
   <div class="pb-3">
     <p-float-label variant="on">
-      <p-date-picker inputStyleClass="w-full" appendTo="body" dateFormat="dd/mm/yy" formControlName="startDate" [showTime]="true"></p-date-picker>
+      <p-date-picker styleClass="w-full" appendTo="body" dateFormat="dd/mm/yy" formControlName="startDate" [showTime]="true"></p-date-picker>
       <label>Date de départ</label>
     </p-float-label>
   </div>
   <div class="pb-3">
     <p-float-label variant="on">
-      <p-date-picker inputStyleClass="w-full" appendTo="body" dateFormat="dd/mm/yy" formControlName="endDate" [showTime]="true"></p-date-picker>
+      <p-date-picker styleClass="w-full" appendTo="body" dateFormat="dd/mm/yy" formControlName="endDate" [showTime]="true"></p-date-picker>
       <label>Date de fin</label>
     </p-float-label>
   </div>
