@@ -1,12 +1,12 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import Nora from '@primeng/themes/nora';
 
 import { routes } from './app.routes';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {provideHttpClient} from '@angular/common/http';
 import {providePrimeNG} from 'primeng/config';
 import {ConfirmationService, MessageService} from 'primeng/api';
+import {CustomPreset} from './prime.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     providePrimeNG({
       ripple: true,
-      theme: { preset: Nora }
+      theme: { preset: CustomPreset }
     }),
     ConfirmationService,
     MessageService,
