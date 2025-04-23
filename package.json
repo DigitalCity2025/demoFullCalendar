@@ -21,6 +21,8 @@
     "@fullcalendar/core": "^6.1.17",
     "@fullcalendar/daygrid": "^6.1.17",
     "@fullcalendar/interaction": "^6.1.17",
+    "@fullcalendar/resource": "^6.1.17",
+    "@fullcalendar/resource-timegrid": "^6.1.17",
     "@primeng/themes": "^19.1.0",
     "concurrently": "^9.1.2",
     "primeflex": "^4.0.0",

@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import resourceTimelinePlugin from '@fullcalendar/resource-timegrid';
 import {Toast} from 'primeng/toast';
 import {ConfirmDialog} from 'primeng/confirmdialog';
 import {FullCalendarModule} from '@fullcalendar/angular';
@@ -21,10 +21,11 @@ export class AppComponent {
   popupVisible: boolean = false;
   event: any;
 
-  options: CalendarOptions = {
-    plugins: [DayGridPlugin, InteractionPlugin],
+  options: CalendarOptions & { schedulerLicenseKey: string } = {
+    plugins: [resourceTimelinePlugin, InteractionPlugin],
     eventClick: (e) => this.eventClickHandler(e),
     dateClick: (e) => this.dateClickHandler(e),
+    schedulerLicenseKey: 'CC-Attribution-NonCommercial-NoDerivatives',
   }
 
   events!: EventInput[];
