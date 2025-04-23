@@ -50,6 +50,7 @@ export class AppComponent {
           title: e.title,
           start: new Date(e.startDate),
           end: new Date(e.endDate),
+          color: this.getColor(e.type),
           extendedProps: {
             description: e.description,
             type: e.type
@@ -57,6 +58,19 @@ export class AppComponent {
         }));
       }
     })
+  }
+
+  private getColor(type: string) {
+    switch (type) {
+      case 'Category 1':
+        return '#1f77b4';
+      case 'Category 2':
+        return '#ff7f0e';
+      case 'Category 3':
+        return '#2ca02c';
+      default:
+        return '#d62728';
+    }
   }
 
   private eventClickHandler(e: EventClickArg) {
