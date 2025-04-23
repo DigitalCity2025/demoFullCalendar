@@ -54,6 +54,8 @@
               }
             ],
             "styles": [
+              "node_modules/primeflex/primeflex.min.css",
+              "node_modules/primeicons/primeicons.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -120,5 +122,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

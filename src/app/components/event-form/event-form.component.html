@@ -1,0 +1,38 @@
+<div class="flex justify-content-end mb-3">
+  <p-button icon="pi pi-trash" (onClick)="delete()" severity="danger"></p-button>
+</div>
+<form [formGroup]="form" (ngSubmit)="save()">
+  <div class="pb-3">
+    <p-float-label variant="on">
+      <input class="w-full" pInputText formControlName="title" />
+      <label>Title</label>
+    </p-float-label>
+  </div>
+  <div class="pb-3">
+    <p-float-label variant="on">
+      <textarea class="w-full" pInputText formControlName="description"></textarea>
+      <label>Description</label>
+    </p-float-label>
+  </div>
+  <div class="pb-3">
+    <p-float-label variant="on">
+      <p-date-picker inputStyleClass="w-full" appendTo="body" dateFormat="dd/mm/yy" formControlName="startDate" [showTime]="true"></p-date-picker>
+      <label>Date de départ</label>
+    </p-float-label>
+  </div>
+  <div class="pb-3">
+    <p-float-label variant="on">
+      <p-date-picker inputStyleClass="w-full" appendTo="body" dateFormat="dd/mm/yy" formControlName="endDate" [showTime]="true"></p-date-picker>
+      <label>Date de fin</label>
+    </p-float-label>
+  </div>
+  <div class="pb-3">
+    <p-float-label variant="on">
+      <p-select styleClass="w-full" [options]="['Category 1', 'Category 2', 'Category 3']" formControlName="type"></p-select>
+      <label>Type</label>
+    </p-float-label>
+  </div>
+  <div class="pb-3 flex justify-content-end">
+    <p-button type="submit" label="Save" icon="pi pi-send" iconPos="right"></p-button>
+  </div>
+</form>
