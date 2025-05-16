@@ -9,6 +9,7 @@ import {FloatLabel} from 'primeng/floatlabel';
 import {InputText} from 'primeng/inputtext';
 import {DatePicker} from 'primeng/datepicker';
 import {Select} from 'primeng/select';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
   selector: 'app-event-form',
@@ -24,13 +25,14 @@ import {Select} from 'primeng/select';
   styleUrl: './event-form.component.scss'
 })
 export class EventFormComponent {
-  private formBuilder = inject(FormBuilder);
-  private messageService = inject(MessageService);
-  private confirmationService = inject(ConfirmationService);
-  private eventService = inject(EventService);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly messageService = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
+  private readonly eventService = inject(EventService);
+  private readonly dialogConfig = inject(DynamicDialogConfig);
+  private readonly dialogRef = inject(DynamicDialogRef);
 
-  onSave = output<boolean>();
-  event = input.required<EventModel>();
+  event = this.dialogConfig.data;
   form = this.formBuilder.group({
     title: ['', [Validators.required]],
     description: [''],
@@ -41,13 +43,13 @@ export class EventFormComponent {
 
   constructor() {
     effect(() => {
-      if(!this.event()) {
+      if(!this.event) {
         return;
       }
       this.form.patchValue({
-        ...this.event(),
-        startDate: new Date(this.event().startDate),
-        endDate: new Date(this.event().endDate ?? this.event().startDate),
+        ...this.event,
+        startDate: new Date(this.event.startDate),
+        endDate: new Date(this.event.endDate ?? this.event.startDate),
       })
     })
   }
@@ -57,14 +59,14 @@ export class EventFormComponent {
       return;
     }
     iif(
-      () => !this.event().id,
+      () => !this.event.id,
       this.eventService.add(this.form.value),
-      this.eventService.update(this.event().id, this.form.value),
+      this.eventService.update(this.event.id, this.form.value),
     ).subscribe({
       next: () => {
         this.messageService.add({severity: 'success', summary: 'Event saved'});
-        this.onSave.emit(true);
         this.form.reset();
+        this.dialogRef.close(true);
       },
       error: () => {
         this.messageService.add({severity: 'error', summary: 'Error saving event'});
@@ -76,11 +78,11 @@ export class EventFormComponent {
     this.confirmationService.confirm({
       header: 'Êtes-vous sûr de vouloir supprimer cet événement ?',
       accept: () => {
-        this.eventService.delete(this.event().id).subscribe({
+        this.eventService.delete(this.event.id).subscribe({
           next: () => {
             this.messageService.add({severity: 'success', summary: 'Event deleted'});
-            this.onSave.emit(true);
             this.form.reset();
+            this.dialogRef.close(true);
           },
           error: () => {
             this.messageService.add({severity: 'error', summary: 'Error deleting event'});

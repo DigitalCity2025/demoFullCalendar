@@ -1,10 +1,10 @@
-@if(event().id) {
-  <div class="flex justify-content-end mb-3">
+@if(event.id) {
+  <div class="flex justify-content-end m-3">
     <p-button icon="pi pi-trash" (onClick)="delete()" severity="danger"></p-button>
   </div>
 }
 <form [formGroup]="form" (ngSubmit)="save()">
-  <div class="pb-3">
+  <div class="py-3">
     <p-float-label variant="on">
       <input class="w-full" pInputText formControlName="title" />
       <label>Title</label>

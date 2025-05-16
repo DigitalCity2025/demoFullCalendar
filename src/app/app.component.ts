@@ -2,24 +2,29 @@ import {Component, inject} from '@angular/core';
 import resourceTimelinePlugin from '@fullcalendar/resource-timegrid';
 import {Toast} from 'primeng/toast';
 import {ConfirmDialog} from 'primeng/confirmdialog';
+import {DialogService} from 'primeng/dynamicdialog';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import {EventService} from './services/event.service';
 import {CalendarOptions, EventClickArg, EventInput,} from '@fullcalendar/core';
-import DayGridPlugin from '@fullcalendar/daygrid';
 import InteractionPlugin, {DateClickArg} from '@fullcalendar/interaction';
-import {Dialog} from 'primeng/dialog';
-import {EventFormComponent} from './components/event-form/event-form.component';
+import { EventFormComponent } from './components/event-form/event-form.component';
 
+const BASE_DIALOG_OTIONS = {
+  style: { width: '50rem' },
+  breakpoints: { '1199px': '75vw', '575px': '90vw' },
+  maximizable: true,
+  modal: true,
+  closable: true,
+}
 @Component({
   selector: 'app-root',
-  imports: [Toast, ConfirmDialog, FullCalendarModule, Dialog, EventFormComponent],
+  imports: [Toast, ConfirmDialog, FullCalendarModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  private eventService = inject(EventService);
-  popupVisible: boolean = false;
-  event: any;
+  private readonly eventService = inject(EventService);
+  private readonly dialogService = inject(DialogService);
 
   options: CalendarOptions & { schedulerLicenseKey: string } = {
     plugins: [resourceTimelinePlugin, InteractionPlugin],
@@ -35,8 +40,6 @@ export class AppComponent {
   }
 
   onSave(result: boolean) {
-    this.popupVisible = false;
-    this.event = null;
     if(result) {
       this.loadEvents();
     }
@@ -74,7 +77,7 @@ export class AppComponent {
   }
 
   private eventClickHandler(e: EventClickArg) {
-    this.event = {
+    const event = {
       id: e.event.id,
       title: e.event.title,
       description: e.event.extendedProps['description'],
@@ -82,20 +85,21 @@ export class AppComponent {
       endDate: e.event.end,
       type: e.event.extendedProps['type'],
     };
-    this.popupVisible = true;
+    this.dialogService.open(EventFormComponent, {
+      ...BASE_DIALOG_OTIONS,
+      data: event,
+      header: 'Modifier un événement'
+    }).onClose.subscribe((response) => { if(response) this.loadEvents(); });
   }
 
   private dateClickHandler(e: DateClickArg) {
-    this.event = {
+    const event = {
       startDate: e.date.toISOString(),
     };
-    this.popupVisible = true;
-  }
-
-
-  onClose() {
-    console.log(42)
-    this.popupVisible = false;
-    this.event = null;
+    this.dialogService.open(EventFormComponent, {
+      ...BASE_DIALOG_OTIONS,
+      data: event,
+      header: 'Ajouter un événement'
+    }).onClose.subscribe((response) => { if(response) this.loadEvents(); });;
   }
 }

@@ -4,10 +4,5 @@
   </div>
 </div>
 
-<p-dialog [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true" [(visible)]="popupVisible" header="Event Form" modal="true" (onHide)="onClose()" >
-  @if(event) {
-    <app-event-form [event]="event" (onSave)="onSave($event)"></app-event-form>
-  }
-</p-dialog>
 <p-toast></p-toast>
 <p-confirm-dialog></p-confirm-dialog>
