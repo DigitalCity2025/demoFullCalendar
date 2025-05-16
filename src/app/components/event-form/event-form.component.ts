@@ -34,11 +34,11 @@ export class EventFormComponent {
 
   event: Partial<EventModel> = this.dialogConfig.data;
   form = this.formBuilder.group({
-    title: ['', [Validators.required]],
-    description: [''],
+    title: [this.event.title, [Validators.required]],
+    description: [this.event.description],
     startDate: [new Date(this.event.startDate!), [Validators.required]],
     endDate: [new Date(this.event.endDate ?? this.event.startDate!), [Validators.required]],
-    type: ['', [Validators.required]],
+    type: [this.event.type, [Validators.required]],
   });
 
   save() {
