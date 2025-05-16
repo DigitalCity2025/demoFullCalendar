@@ -8,6 +8,7 @@ import {EventService} from './services/event.service';
 import {CalendarOptions, EventClickArg, EventInput,} from '@fullcalendar/core';
 import InteractionPlugin, {DateClickArg} from '@fullcalendar/interaction';
 import { EventFormComponent } from './components/event-form/event-form.component';
+import { EventModel } from './models/event.model';
 
 const BASE_DIALOG_OTIONS = {
   style: { width: '50rem' },
@@ -76,30 +77,30 @@ export class AppComponent {
     }
   }
 
+  private openFormDialog(event: any) {
+    this.dialogService.open(EventFormComponent, {
+      ...BASE_DIALOG_OTIONS,
+      data: event,
+      header: event.id ? 'Modifier un événement' : 'Ajouter un événement'
+    }).onClose.subscribe((response) => { if(response) this.loadEvents(); });
+  } 
+
   private eventClickHandler(e: EventClickArg) {
-    const event = {
+    const event: Partial<EventModel> = {
       id: e.event.id,
       title: e.event.title,
       description: e.event.extendedProps['description'],
-      startDate: e.event.start,
-      endDate: e.event.end,
+      startDate: e.event.start?.toISOString(),
+      endDate: e.event.end?.toISOString(),
       type: e.event.extendedProps['type'],
     };
-    this.dialogService.open(EventFormComponent, {
-      ...BASE_DIALOG_OTIONS,
-      data: event,
-      header: 'Modifier un événement'
-    }).onClose.subscribe((response) => { if(response) this.loadEvents(); });
+    this.openFormDialog(event);
   }
 
   private dateClickHandler(e: DateClickArg) {
-    const event = {
+    const event: Partial<EventModel> = {
       startDate: e.date.toISOString(),
     };
-    this.dialogService.open(EventFormComponent, {
-      ...BASE_DIALOG_OTIONS,
-      data: event,
-      header: 'Ajouter un événement'
-    }).onClose.subscribe((response) => { if(response) this.loadEvents(); });;
+    this.openFormDialog(event);
   }
 }

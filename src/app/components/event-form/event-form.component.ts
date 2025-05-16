@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, output} from '@angular/core';
+import {Component, effect, inject} from '@angular/core';
 import {EventModel} from '../../models/event.model';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ConfirmationService, MessageService} from 'primeng/api';
@@ -32,27 +32,14 @@ export class EventFormComponent {
   private readonly dialogConfig = inject(DynamicDialogConfig);
   private readonly dialogRef = inject(DynamicDialogRef);
 
-  event = this.dialogConfig.data;
+  event: Partial<EventModel> = this.dialogConfig.data;
   form = this.formBuilder.group({
     title: ['', [Validators.required]],
     description: [''],
-    startDate: [new Date(), [Validators.required]],
-    endDate: [new Date(), [Validators.required]],
+    startDate: [new Date(this.event.startDate!), [Validators.required]],
+    endDate: [new Date(this.event.endDate ?? this.event.startDate!), [Validators.required]],
     type: ['', [Validators.required]],
   });
-
-  constructor() {
-    effect(() => {
-      if(!this.event) {
-        return;
-      }
-      this.form.patchValue({
-        ...this.event,
-        startDate: new Date(this.event.startDate),
-        endDate: new Date(this.event.endDate ?? this.event.startDate),
-      })
-    })
-  }
 
   save() {
     if(this.form.invalid) {
@@ -61,7 +48,7 @@ export class EventFormComponent {
     iif(
       () => !this.event.id,
       this.eventService.add(this.form.value),
-      this.eventService.update(this.event.id, this.form.value),
+      this.eventService.update(this.event.id!, this.form.value),
     ).subscribe({
       next: () => {
         this.messageService.add({severity: 'success', summary: 'Event saved'});
@@ -78,7 +65,7 @@ export class EventFormComponent {
     this.confirmationService.confirm({
       header: 'Êtes-vous sûr de vouloir supprimer cet événement ?',
       accept: () => {
-        this.eventService.delete(this.event.id).subscribe({
+        this.eventService.delete(this.event.id!).subscribe({
           next: () => {
             this.messageService.add({severity: 'success', summary: 'Event deleted'});
             this.form.reset();
